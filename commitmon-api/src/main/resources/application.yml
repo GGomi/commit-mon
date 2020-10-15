@@ -1,0 +1,12 @@
+
+spring:
+  profiles:
+    active: local
+  jpa:
+    database: mysql
+    show-sql: true
+    generate-ddl: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/commit_mon?useUnicode=true&charset=utf8mb4&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password:
