@@ -10,7 +10,12 @@ import org.springframework.core.env.Environment
 import java.util.*
 import javax.annotation.PostConstruct
 
-@SpringBootApplication
+@SpringBootApplication(
+    scanBasePackages = [
+        "com.commitmon.api",
+        "com.commitmon.domain"
+    ]
+)
 class Application(
     private val environment: Environment,
     private val buildProperties: BuildProperties

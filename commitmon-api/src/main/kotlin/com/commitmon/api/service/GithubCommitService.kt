@@ -24,7 +24,8 @@ class GithubCommitService(
             if (response.items.isNotEmpty()) {
                 val time = response.items.map { ZonedDateTime.parse(it.commit.author.date, DateTimeFormatter.ISO_OFFSET_DATE_TIME).withZoneSameInstant(
                     ZoneId.of("Asia/Seoul")).toLocalDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) }
-                print("hi")
+
+
             }
         }
 

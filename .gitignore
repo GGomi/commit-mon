@@ -35,4 +35,4 @@ out/
 ### logs ###
 logs/
 
-/src/main/resources/config/application-local.yml
+commitmon-domain/src/main/resources/properties/database/**
