@@ -1,8 +1,8 @@
-
 spring:
   profiles:
     active: local
-  jpa:
-    database: mysql
-    show-sql: true
-    generate-ddl: false
+  pid:
+    file: logs/commitmon-api.pid
+
+server:
+  port: 5000

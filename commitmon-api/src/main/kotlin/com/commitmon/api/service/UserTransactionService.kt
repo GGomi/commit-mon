@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class UserTransactionService(
     private val userRepository: UserRepository
 ) {
-    fun findByNickName(nickName: String): User? {
-        return userRepository.findByNickname(nickName)
+    fun findByUsername(username: String): User {
+        return userRepository.findByUsername(username) ?: User.init(username)
     }
 }
