@@ -1,5 +1,6 @@
 package com.commitmon.api.service
 
+import com.commitmon.api.dto.CommitMonResponse
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -10,18 +11,36 @@ class CommitCalculateService(
     private val userTransactionService: UserTransactionService,
     private val commitSearchService: CommitSearchService
 ) {
-    fun calculate(username: String): Int {
+    fun calculate(username: String): CommitMonResponse {
         val user = userTransactionService.findByUsername(username)
+
         val targetDate = user.checkPoint.truncatedTo(ChronoUnit.DAYS).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         val commitList = commitSearchService.getRecentCommit(username, targetDate)
+        var isLvUp = false
 
-        return if (commitList.isNotEmpty()) {
+        if (commitList.isNotEmpty()) {
             val commitDateGroupingList = commitList.groupingBy { it }.eachCount()
             val dateList = commitDateGroupingList.keys.toList()
-            calculatePoint(dateList)
-        } else {
-            0
+            val calculatedPoint = calculatePoint(dateList)
+
+
+            if (calculatedPoint != user.point) {
+                if (user.level.isMeetTheLvUpCondition(calculatedPoint)) {
+                    user.lvUp()
+                    isLvUp = true
+                } else {
+                    user.updatePoint(calculatedPoint)
+                }
+
+                userTransactionService.save(user)
+            }
         }
+
+        return CommitMonResponse(
+            isLvUp = isLvUp,
+            level = user.level,
+            point = user.point
+        )
 
     }
 
@@ -39,6 +58,10 @@ class CommitCalculateService(
             }
 
             target = it
+        }
+
+        if (comboPoint != 0) {
+            point += comboPoint
         }
 
         return point

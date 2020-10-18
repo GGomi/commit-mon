@@ -6,32 +6,44 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "user")
-class User(
+class User constructor() : AbstractBaseAuditEntity() {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "id", nullable = false)
-        var id: Long? = null,
+    @Column(name = "username", nullable = false)
+    lateinit var username: String
 
-        @Column(name = "username", nullable = false)
-        val username: String,
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level", nullable = false)
+    lateinit var level: CommitMonLevel
 
-        @Enumerated(EnumType.STRING)
-        @Column(name = "level", nullable = false)
-        val level: CommitMonLevel = CommitMonLevel.LEVEL_0,
+    @Column(name = "point", nullable = false)
+    var point: Int = 0
+        private set
 
-        @Column(name = "point", nullable = false)
-        val point: Long = 0,
+    @Column(name = "check_point", nullable = false)
+    lateinit var checkPoint: ZonedDateTime
+        private set
 
-        @Column(name = "check_point", nullable = false)
-        var checkPoint: ZonedDateTime = ZonedDateTime.now()
+    private constructor(username: String): this() {
+        this.username = username
+    }
 
-) : AbstractBaseAuditEntity() {
     companion object {
         fun init(username: String): User {
-            return User(
-                    username = username
-            )
+            return User(username).also {
+                it.level = CommitMonLevel.LEVEL_0
+                it.point = 0
+                it.checkPoint = ZonedDateTime.now()
+            }
         }
+    }
+
+    fun lvUp() {
+        this.level = CommitMonLevel.values()[this.level.ordinal + 1]
+        this.point = 0
+        this.checkPoint = ZonedDateTime.now()
+    }
+
+    fun updatePoint(point: Int) {
+        this.point = point
     }
 }

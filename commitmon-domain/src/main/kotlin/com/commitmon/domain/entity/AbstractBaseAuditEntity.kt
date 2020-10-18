@@ -6,9 +6,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.EntityListeners
-import javax.persistence.MappedSuperclass
+import javax.persistence.*
 
 @MappedSuperclass
 @JsonIgnoreProperties(value = [
@@ -16,13 +14,20 @@ import javax.persistence.MappedSuperclass
 ], allowGetters = true)
 @EntityListeners(AuditingEntityListener::class)
 abstract class AbstractBaseAuditEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+        private set
+
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "datetime default CURRENT_TIMESTAMP")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Asia/Seoul")
-    var createdAt: LocalDateTime = LocalDateTime.now()
+    lateinit var createdAt: LocalDateTime
+        private set
 
     @LastModifiedDate
     @Column(name = "modified_at", columnDefinition = "datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Asia/Seoul")
-    var modifiedAt: LocalDateTime = LocalDateTime.now()
+    lateinit var modifiedAt: LocalDateTime
+        private set
 }

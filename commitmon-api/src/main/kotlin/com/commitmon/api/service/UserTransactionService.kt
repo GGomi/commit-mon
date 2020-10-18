@@ -11,4 +11,8 @@ class UserTransactionService(
     fun findByUsername(username: String): User {
         return userRepository.findByUsername(username) ?: User.init(username)
     }
+
+    fun save(user: User): User {
+        return userRepository.save(user)
+    }
 }
