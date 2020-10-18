@@ -16,6 +16,7 @@ class User(
         @Column(name = "username", nullable = false)
         val username: String,
 
+        @Enumerated(EnumType.STRING)
         @Column(name = "level", nullable = false)
         val level: CommitMonLevel = CommitMonLevel.LEVEL_0,
 

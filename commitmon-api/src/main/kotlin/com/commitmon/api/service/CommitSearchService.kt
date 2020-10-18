@@ -17,33 +17,65 @@ class CommitSearchService(
     private val log by logger()
 
     private val url =
-        "https://api.github.com/search/commits?q=author:##nickname## committer-date:>##targetDate##&sort=author-date&order=asc"
+        "https://api.github.com/search/commits?q=author:##nickname## author-date:>=##targetDate##&sort=author-date&order=asc&per_page=100&page="
 
     fun getRecentCommit(username: String, targetDate: String): List<ZonedDateTime> {
-        val header = HttpHeaders()
-        header.set("accept", "application/vnd.github.cloak-preview+json")
+        val list = mutableListOf<ZonedDateTime>()
 
         try {
-            val response = apiAdvice.get(url.replace("##nickname##", username), header, CommitResponse::class.java).body
+            val url = url.replace("##nickname##", username).replace("##targetDate##", targetDate)
+            var page = 2
+            val response = callApi(username, url, 1)
 
             if (response != null) {
-                if (response.items.isNotEmpty()) {
-                    return response.items.map {
-                        ZonedDateTime.parse(
-                            it.commit.author.date,
-                            DateTimeFormatter.ISO_OFFSET_DATE_TIME
-                        ).truncatedTo(ChronoUnit.DAYS)
-                    }
+                val totalPage = if (response.totalCount % 100 > 0) {
+                    (response.totalCount / 100) + 1
+                } else {
+                    response.totalCount / 100
                 }
-                return emptyList()
+
+                if (response.items.isNotEmpty()) {
+                    list.addAll(
+                        response.items.map {
+                            ZonedDateTime.parse(
+                                it.commit.author.date,
+                                DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                            ).truncatedTo(ChronoUnit.DAYS)
+                        })
+                }
+
+                while (page <= totalPage) {
+                    val result = callApi(username, url, page)
+
+                    if (result != null) {
+                        if (result.items.isNotEmpty()) {
+                            list.addAll(
+                                result.items.map {
+                                    ZonedDateTime.parse(
+                                        it.commit.author.date,
+                                        DateTimeFormatter.ISO_OFFSET_DATE_TIME
+                                    ).truncatedTo(ChronoUnit.DAYS)
+                                })
+                        }
+                    }
+
+                    page++
+                }
+
+                return list
             } else {
-                return emptyList()
+                return list
             }
         } catch (e: Exception) {
             log.info("$username / ${e.message}")
-            return emptyList()
+            return list
         }
+    }
 
+    fun callApi(username: String, url: String, page: Int): CommitResponse? {
+        val header = HttpHeaders()
+        header.set("accept", "application/vnd.github.cloak-preview+json")
 
+        return apiAdvice.get("$url$page", header, CommitResponse::class.java).body
     }
 }
