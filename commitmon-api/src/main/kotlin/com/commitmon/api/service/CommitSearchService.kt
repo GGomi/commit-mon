@@ -2,6 +2,8 @@ package com.commitmon.api.service
 
 import com.commitmon.api.config.ApiAdvice
 import com.commitmon.api.dto.CommitResponse
+import com.commitmon.api.exception.BusinessException
+import com.commitmon.api.exception.ErrorCode
 import com.commitmon.api.logger
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Service
@@ -68,7 +70,7 @@ class CommitSearchService(
             }
         } catch (e: Exception) {
             log.info("$username / ${e.message}")
-            return list
+            throw BusinessException(ErrorCode.NOT_FOUND)
         }
     }
 

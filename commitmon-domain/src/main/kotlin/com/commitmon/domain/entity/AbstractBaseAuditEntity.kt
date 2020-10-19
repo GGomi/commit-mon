@@ -22,12 +22,10 @@ abstract class AbstractBaseAuditEntity {
     @CreatedDate
     @Column(name = "created_at", columnDefinition = "datetime default CURRENT_TIMESTAMP")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Asia/Seoul")
-    lateinit var createdAt: LocalDateTime
-        private set
+    var createdAt: LocalDateTime = LocalDateTime.now()
 
     @LastModifiedDate
     @Column(name = "modified_at", columnDefinition = "datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", timezone = "Asia/Seoul")
-    lateinit var modifiedAt: LocalDateTime
-        private set
+    var modifiedAt: LocalDateTime = LocalDateTime.now()
 }

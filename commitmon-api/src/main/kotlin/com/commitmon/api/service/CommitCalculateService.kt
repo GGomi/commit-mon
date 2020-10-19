@@ -23,7 +23,6 @@ class CommitCalculateService(
             val dateList = commitDateGroupingList.keys.toList()
             val calculatedPoint = calculatePoint(dateList)
 
-
             if (calculatedPoint != user.point) {
                 if (user.level.isMeetTheLvUpCondition(calculatedPoint)) {
                     user.lvUp()
@@ -53,15 +52,11 @@ class CommitCalculateService(
             if (target.plusDays(1) == it) {
                 comboPoint += comboPoint + 1
             } else {
-                point += comboPoint + 1
+                point += 1
                 comboPoint = 0
             }
 
             target = it
-        }
-
-        if (comboPoint != 0) {
-            point += comboPoint
         }
 
         return point
