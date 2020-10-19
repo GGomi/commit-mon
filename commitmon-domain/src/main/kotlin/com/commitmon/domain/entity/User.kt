@@ -32,7 +32,7 @@ class User constructor() : AbstractBaseAuditEntity() {
             return User(username).also {
                 it.level = CommitMonLevel.LEVEL_0
                 it.point = 0
-                it.checkPoint = ZonedDateTime.now()
+                it.checkPoint = ZonedDateTime.now().minusDays(7)
             }
         }
     }

@@ -46,14 +46,15 @@ class CommitCalculateService(
     private fun calculatePoint(dateList: List<ZonedDateTime>): Int {
         var point = 0
         var target = dateList[0]
-        var comboPoint = 0
+        var comboPoint = 1
 
         dateList.forEach {
             if (target.plusDays(1) == it) {
-                comboPoint += comboPoint + 1
+                point += comboPoint + 1
+                comboPoint++
             } else {
                 point += 1
-                comboPoint = 0
+                comboPoint = 1
             }
 
             target = it
