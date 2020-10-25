@@ -30,11 +30,7 @@ class CommitSearchService(
             val response = callApi(username, url, 1)
 
             if (response != null) {
-                val totalPage = if (response.totalCount % 100 > 0) {
-                    (response.totalCount / 100) + 1
-                } else {
-                    response.totalCount / 100
-                }
+                val totalPage = calcTotalPage(response.totalCount)
 
                 if (response.items.isNotEmpty()) {
                     list.addAll(
@@ -71,6 +67,14 @@ class CommitSearchService(
         } catch (e: Exception) {
             log.info("$username / ${e.message}")
             throw BusinessException(ErrorCode.NOT_FOUND)
+        }
+    }
+
+    private fun calcTotalPage(totalCount: Int): Int {
+        return if (totalCount % 100 > 0) {
+            (totalCount / 100) + 1
+        } else {
+            totalCount / 100
         }
     }
 
