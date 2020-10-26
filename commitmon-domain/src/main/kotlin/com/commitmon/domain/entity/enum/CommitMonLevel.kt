@@ -1,13 +1,14 @@
 package com.commitmon.domain.entity.enum
 
 enum class CommitMonLevel(
-    val pointGauge: Int
+    val pointGauge: Int,
+    val commitMonImg: String
 ) {
-    LEVEL_0(40),
-    LEVEL_1(60),
-    LEVEL_2(100),
-    LEVEL_3(140),
-    LEVEL_4(9999999);
+    LEVEL_0(40, "/gif/egg.gif"),
+    LEVEL_1(60, ""),
+    LEVEL_2(100, ""),
+    LEVEL_3(140, ""),
+    LEVEL_4(9999999, "");
 
     fun isMeetTheLvUpCondition(point: Int): Boolean {
         return this.pointGauge <= point

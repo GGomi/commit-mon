@@ -3,6 +3,7 @@ package com.commitmon.api
 import com.commitmon.api.service.ChooseCommitmonService
 import com.commitmon.api.service.CommitCalculateService
 import com.commitmon.api.support.RestSupport
+import com.google.common.io.ByteStreams.toByteArray
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController
 class CommitMonApi(
     private val chooseCommitmonService: ChooseCommitmonService
 ): RestSupport() {
-    @GetMapping("/test", produces = [MediaType.IMAGE_GIF_VALUE])
-    fun test(
+    @GetMapping("", produces = [MediaType.IMAGE_GIF_VALUE])
+    fun getCommitMon(
         @RequestParam("username", required = true) name: String
-    ): ResponseEntity<*> {
-        return dataResponse(chooseCommitmonService.getCommitMon(name))
+    ): ByteArray {
+        return toByteArray(chooseCommitmonService.getCommitMon(name)!!)
     }
 }
