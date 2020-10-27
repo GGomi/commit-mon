@@ -1,6 +1,5 @@
 package com.commitmon.api.service
 
-import com.google.common.io.ByteStreams.toByteArray
 import org.springframework.stereotype.Service
 import java.io.InputStream
 
