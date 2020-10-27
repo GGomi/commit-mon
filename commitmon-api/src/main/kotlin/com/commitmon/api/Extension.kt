@@ -14,3 +14,7 @@ val mapper: ObjectMapper = jacksonObjectMapper()
     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
 fun <A : Any> A.logger(): Lazy<Logger> = lazy { LoggerFactory.getLogger(this.javaClass) }
+
+fun String.removeSpecialCharacter(): String {
+    return this.replace(Regex("[^\\uAC00-\\uD7A3xfe0-9a-zA-Z\\\\s]"), "")
+}
