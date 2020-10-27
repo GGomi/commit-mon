@@ -1,5 +1,8 @@
-package com.commitmon.api.exception
+package com.commitmon.api.advice
 
+import com.commitmon.api.exception.BusinessException
+import com.commitmon.api.exception.ErrorCode
+import com.commitmon.api.exception.ErrorResponse
 import com.commitmon.api.logger
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -77,15 +80,8 @@ class GlobalExceptionAdvice {
         return ResponseEntity(response, HttpStatus.valueOf(ErrorCode.HANDLE_ACCESS_DENIED.status))
     }
 
-    /**
-     * 자바, 스프링 및 내부적인 예외 값들에대한 validation, 아래 해당 exception은 세분화 하지 않고 하나로 퉁침 -> 세밀하게 가져갈 필요가 있는경우 분리해도 됨
-     * HttpMessageNotReadableException: json serialize 못하는 하는 경우, json 포멧 자체가 안맞을 때 발생
-     * MissingServletRequestParameterException: 필수 request parameter 없는 경우
-     * IllegalArgumentException: java exception
-     */
     @ExceptionHandler(
         IllegalArgumentException::class,
-        MissingServletRequestParameterException::class,
         HttpMessageNotReadableException::class
     )
     protected fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponse> {
@@ -94,11 +90,13 @@ class GlobalExceptionAdvice {
         return ResponseEntity(response, HttpStatus.BAD_REQUEST)
     }
 
-    // 비지니스 로직에 의한 Exception
-    /**
-     * BusinessException 상속하는 ERP Exception(비지니스 코드 관련 예외)처리를 담당한다.
-     * Error Response의 message, status 값은 ErrorCode 값에 의해 결정된다.
-     */
+    @ExceptionHandler(MissingServletRequestParameterException::class)
+    protected fun handleMissingServletRequestParameterException(e: MissingServletRequestParameterException): ResponseEntity<ErrorResponse> {
+        log.error("MissingServletRequestParameterException", e)
+        val response = ErrorResponse(ErrorCode.INVALID_INPUT_VALUE, e)
+        return ResponseEntity(response, HttpStatus.BAD_REQUEST)
+    }
+
     @ExceptionHandler(BusinessException::class)
     protected fun handleBusinessException(e: BusinessException): ResponseEntity<ErrorResponse> {
         log.error("BusinessException", e)

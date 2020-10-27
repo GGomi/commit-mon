@@ -56,7 +56,6 @@ class CommitCalculateService(
                 point += 1
                 comboPoint = 1
             }
-
             target = it
         }
 
