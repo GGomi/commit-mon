@@ -24,6 +24,10 @@ class ErrorResponse private constructor(
         errors = FieldError.ofEmptyList()
     }
 
+    constructor(code: ErrorCode, bindingResult: BindingResult) : this(code) {
+        errors = FieldError.ofList(bindingResult)
+    }
+
     class FieldError private constructor(
         val field: String,
         val value: String,
