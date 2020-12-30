@@ -5,7 +5,7 @@ enum class CommitMonLevel(
     val commitMonImg: String
 ) {
     LEVEL_0(40, "/gif/egg.gif"),
-    LEVEL_1(60, ""),
+    LEVEL_1(60, "/gif/grass.gif"),
     LEVEL_2(100, ""),
     LEVEL_3(140, ""),
     LEVEL_4(9999999, "");

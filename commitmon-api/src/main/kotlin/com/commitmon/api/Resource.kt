@@ -25,4 +25,9 @@ class CommitMonApi(
     ): ByteArray {
         return toByteArray(chooseCommitmonService.getCommitMon(name)!!)
     }
+
+//    @GetMapping("/test")
+//    fun test() {
+//        chooseCommitmonService.test()
+//    }
 }

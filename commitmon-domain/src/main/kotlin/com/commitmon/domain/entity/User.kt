@@ -1,10 +1,13 @@
 package com.commitmon.domain.entity;
 
 import com.commitmon.domain.entity.enum.CommitMonLevel
+import lombok.NoArgsConstructor
+import org.hibernate.annotations.DynamicInsert
 import java.time.ZonedDateTime
 import javax.persistence.*
 
 @Entity
+@DynamicInsert
 @Table(name = "user")
 class User constructor() : AbstractBaseAuditEntity() {
 
