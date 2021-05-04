@@ -32,5 +32,4 @@ Commit 유무|O|X|O|O ...
 책정되는 Score|1|0|1|1 + 2 Combo ...
 
 ## How To
-- http://15.164.170.96:5000/api/v1/commit-mon?username={}
-- 위의 Url에 Github name을 Parameter로 넣어주면 나의 Commitmon이 나타납니다.
+- 준비중
